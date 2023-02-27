@@ -15,10 +15,7 @@ tasks:
       sudo apt update
       sudo apt install -y postgresql-client-13 libpq-dev
 
-ports:
-  - name: psql-database
-    port: 5432
-    visibility: public
+
 
 vscode:
   extensions:
