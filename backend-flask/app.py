@@ -48,8 +48,8 @@ from flask import got_request_exception
 #LOGGER.info("test log")
 
 #xray
-#xray_url = os.getenv("AWS_XRAY_URL")
-#xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+xray_url = os.getenv("AWS_XRAY_URL")
+xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 
 
 # Initialize tracing and an exporter that can send data to Honeycomb
@@ -68,7 +68,7 @@ tracer = trace.get_tracer(__name__)
 app = Flask(__name__)
 
 #xray
-#XRayMiddleware(app, xray_recorder)
+XRayMiddleware(app, xray_recorder)
 
 # HoneyComb initialize automatic instrumentation with flask
 FlaskInstrumentor().instrument_app(app)
@@ -85,6 +85,7 @@ cors = CORS(
   methods="OPTIONS,GET,HEAD,POST"
 )
 
+#cloudwatch logs
 #@app.after_request
 #def after_request(response):
    # timestamp = strftime('[%Y-%b-%d %H:%M]')
