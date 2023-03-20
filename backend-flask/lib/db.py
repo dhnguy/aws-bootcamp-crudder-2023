@@ -89,6 +89,7 @@ class Db:
     ) object_row);
     """
     return sql
+    
   def query_wrap_array(self,template):
     sql = f"""
     (SELECT COALESCE(array_to_json(array_agg(row_to_json(array_row))),'[]'::json) FROM (

@@ -23,17 +23,17 @@ export default function RecoverPage() {
   }
 
   const onsubmit_confirm_code = async (event) => {
-  event.preventDefault();
-  setErrors('')
-  if (password == passwordAgain){
-    Auth.forgotPasswordSubmit(username, code, password)
-    .then((data) => setFormState('success'))
-    .catch((err) => setErrors(err.message) );
-  } else {
-    setCognitoErrors('Passwords do not match')
+    event.preventDefault();
+    setErrors('')
+    if (password == passwordAgain){
+      Auth.forgotPasswordSubmit(username, code, password)
+      .then((data) => setFormState('success'))
+      .catch((err) => setErrors(err.message) );
+    } else {
+      setCognitoErrors('Passwords do not match')
+    }
+    return false
   }
-  return false
-}
 
   const username_onchange = (event) => {
     setUsername(event.target.value);
