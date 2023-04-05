@@ -19,7 +19,7 @@ attrs = {
 if len(sys.argv) == 2:
   if "prod" in sys.argv[1]:
     attrs = {}
-dynamodb = boto3.client('dynamodb',**attrs)
+ddb = boto3.client('dynamodb',**attrs)
 
 def get_user_uuids():
   sql = """
@@ -59,6 +59,12 @@ def create_message_group(client,message_group_uuid, my_user_uuid, last_message_a
     'user_display_name': {'S': other_user_display_name},
     'user_handle': {'S': other_user_handle}
   }
+
+  response = client.put_item(
+    TableName=table_name,
+    Item=record
+  )
+  print(response)
 
 def create_message(client,message_group_uuid, created_at, message, my_user_uuid, my_user_display_name, my_user_handle):
   table_name = 'cruddur-messages'
@@ -212,6 +218,9 @@ Person 1: And Zathras was just one example of that. He was a small but important
 Person 2: Definitely. I think his character is a great example of the show's ability to balance humor and heart, and to create memorable and beloved characters that fans will cherish for years to come.
 """
 
+now = datetime.now(timezone.utc).astimezone()
+
+
 lines = conversation.lstrip('\n').rstrip('\n').split('\n')
 for i in range(len(lines)):
     if lines[i].startswith('Person 1: '):
@@ -226,11 +235,11 @@ for i in range(len(lines)):
     
     created_at = (now + timedelta(minutes=i)).isoformat()
     create_message_group(client, message_group_uuid, my_user_uuid)(
-    client=ddb,
-    message_group_uuid= message_group_uuid,
-    created_at=created_at,
-    message=message,
-    my_user_uuid=users[key]['uuid'],
-    my_user_display_name=users[key]['display_name'],
-    my_user_handle=users[key]['handle']
-  )
+      client=ddb,
+      message_group_uuid= message_group_uuid,
+      created_at=created_at,
+      message=message,
+      my_user_uuid=users[key]['uuid'],
+      my_user_display_name=users[key]['display_name'],
+      my_user_handle=users[key]['handle']
+    )
